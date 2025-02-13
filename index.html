@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>a longterm view of life.</title>
+    <title>a long term view of life</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -23,6 +23,19 @@
 
         .controls {
             margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .control-group label {
+            margin-right: 10px;
+            font-weight: bold;
         }
 
         input {
@@ -39,13 +52,15 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            align-self: flex-start;
         }
 
         .life-grid {
             display: grid;
-            grid-template-columns: repeat(10, minmax(40px, 1fr));
+            grid-template-columns: repeat(10, minmax(40px, 1fr)); /* Responsive grid layout */
             gap: 10px;
             margin-top: 20px;
+            justify-content: center;
         }
 
         .year {
@@ -72,17 +87,28 @@
             border: 2px solid #9C27B0;
             background-color: transparent;
         }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>visualize your life in the longterm</h1>
-        <p>if you're feeling stressed, take a moment to reflect on how far you've come and how much more lies ahead. relax and appreciate the journey.</p>
+        <p>whenever you feel stressed, take a moment to reflect on how far you've come and how much more lies ahead. relax and appreciate the journey.</p>
 
-        
         <div class="controls">
-            <input type="date" id="birthdate" value="1990-01-01" required>
-            <input type="number" id="lifeExpectancy" value="90" min="1" required>
+            <div class="control-group">
+                <label for="birthdate">Birthdate:</label>
+                <input type="date" id="birthdate" value="1990-01-01" required>
+            </div>
+            <div class="control-group">
+                <label for="lifeExpectancy">Life Expectancy:</label>
+                <input type="number" id="lifeExpectancy" value="90" min="1">
+            </div>
             <button onclick="updateVisualization()">Visualize</button>
         </div>
 
@@ -103,7 +129,7 @@
         function getYearProgress(birthdate) {
             const today = new Date();
             const currentYear = today.getFullYear();
-            
+
             // Find last birthday
             const lastBirthday = new Date(birthdate);
             lastBirthday.setFullYear(currentYear);
@@ -126,14 +152,14 @@
             const lifeExpectancy = parseInt(document.getElementById('lifeExpectancy').value);
             const age = getAge(birthdate);
             const progress = getYearProgress(birthdate);
-            
+
             const lifeGrid = document.getElementById('lifeGrid');
             lifeGrid.innerHTML = '';
 
             for (let year = 1; year <= lifeExpectancy; year++) {
                 const yearElement = document.createElement('div');
                 yearElement.className = 'year';
-                
+
                 if (year <= age) {
                     yearElement.classList.add('completed');
                     yearElement.textContent = year;
@@ -150,9 +176,8 @@
             }
         }
 
-        // Initialize with current date
+        // Initialize with default values
         window.onload = function() {
-            document.getElementById('birthdate').valueAsDate = new Date();
             updateVisualization();
         }
     </script>
