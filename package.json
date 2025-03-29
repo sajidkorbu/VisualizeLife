@@ -1,0 +1,24 @@
+{
+  "name": "visualizelife",
+  "version": "1.0.0",
+  "description": "Visualize your life over the long term",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx http-server",
+    "dev": "npx http-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sajidkorbu/VisualizeLife.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sajidkorbu/VisualizeLife/issues"
+  },
+  "homepage": "https://github.com/sajidkorbu/VisualizeLife#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
