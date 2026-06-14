@@ -3,598 +3,701 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>a longterm view of life</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+
+    <!-- SEO -->
+    <title>Visualize Your Life — see your whole life at a glance</title>
+    <meta name="description" content="A calm, single-page view of your life in years. See how far you've come, how much lies ahead, and take a breath. Your data never leaves your browser.">
+    <link rel="canonical" href="https://visualizelife.netlify.app/">
+    <meta name="theme-color" content="#FBF8F2">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://visualizelife.netlify.app/">
+    <meta property="og:title" content="Visualize Your Life">
+    <meta property="og:description" content="See your whole life in one calm view. How far you've come, how much lies ahead. A gentle moment of perspective.">
+    <meta property="og:image" content="https://visualizelife.netlify.app/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Visualize Your Life">
+    <meta name="twitter:description" content="See your whole life in one calm view. How far you've come, how much lies ahead.">
+    <meta name="twitter:image" content="https://visualizelife.netlify.app/og-image.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --paper:      #FBF8F2;
+            --paper-card: #FFFEFB;
+            --ink:        #2B2722;
+            --ink-soft:   #6B635A;
+            --ink-faint:  #B7AE9F;
+            --sage:       #6E8B7B;
+            --sage-deep:  #5A7567;
+            --gold:       #C9A24B;
+            --line:       #ECE5D8;
+            --shadow:     0 1px 2px rgba(43,39,34,.04), 0 8px 30px rgba(43,39,34,.06);
+            --radius:     16px;
+        }
+
+        * { box-sizing: border-box; }
+
+        html { -webkit-text-size-adjust: 100%; }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 1400px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--ink);
+            background-color: var(--paper);
+            background-image: radial-gradient(circle at 50% -10%, #FFFDF8 0%, var(--paper) 55%);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .wrap {
+            max-width: 760px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+            padding: clamp(28px, 6vw, 72px) clamp(20px, 5vw, 28px) 64px;
         }
 
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 20px;
-            align-items: start;
+        /* ---------- Header ---------- */
+        .eyebrow {
+            font-size: 13px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--sage-deep);
+            font-weight: 600;
+            margin: 0 0 14px;
         }
 
-        .visualization-section {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        h1 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 500;
+            font-size: clamp(2.1rem, 6vw, 3.4rem);
+            line-height: 1.08;
+            letter-spacing: -0.01em;
+            margin: 0 0 16px;
         }
 
-        .comparison-section {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 20px;
+        h1 em { font-style: italic; color: var(--sage-deep); }
+
+        .lede {
+            font-size: clamp(1rem, 2.6vw, 1.18rem);
+            color: var(--ink-soft);
+            max-width: 54ch;
+            margin: 0 0 36px;
         }
 
-        @media (max-width: 1024px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            .comparison-section {
-                position: static;
-            }
-        }
-
+        /* ---------- Controls ---------- */
         .controls {
-            margin-bottom: 20px;
             display: flex;
-            flex-direction: column;
-        }
-
-        .control-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 22px 32px;
+            padding: 22px 24px;
+            background: var(--paper-card);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
         }
 
-        .control-group label {
-            margin-right: 10px;
-            font-weight: bold;
-            min-width: 120px;
+        .field { display: flex; flex-direction: column; gap: 7px; }
+
+        .field label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
         }
 
-        .date-inputs {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .field-row { display: flex; align-items: center; gap: 8px; }
 
         input {
-            padding: 8px;
-            margin: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            font-family: inherit;
+            font-size: 15px;
+            color: var(--ink);
+            padding: 9px 12px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #fff;
+            transition: border-color .15s, box-shadow .15s;
         }
 
         input:focus {
-            border-color: #a8e6cf;  /* Soft mint */
             outline: none;
+            border-color: var(--sage);
+            box-shadow: 0 0 0 3px rgba(110,139,123,.18);
         }
 
-        input[type="number"] {
-            width: 80px;
+        input[type="number"] { width: 92px; }
+        .field-row .sep { color: var(--ink-faint); font-size: 13px; }
+
+        /* ---------- Stats ---------- */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 44px;
         }
 
-        button {
-            padding: 8px 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            align-self: flex-start;
+        .stat {
+            background: var(--paper-card);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 22px 18px;
+            text-align: center;
+            box-shadow: var(--shadow);
         }
 
-        button:hover {
-            background-color: #8cd3b7;  /* Slightly darker mint */
+        .stat .num {
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 500;
+            font-size: clamp(1.5rem, 6vw, 2.4rem);
+            line-height: 1;
+            letter-spacing: -0.01em;
+            font-variant-numeric: tabular-nums;
         }
+
+        .stat:nth-child(1) .num { color: var(--sage-deep); }
+        .stat:nth-child(2) .num { color: var(--ink); }
+        .stat:nth-child(3) .num { color: var(--gold); }
+
+        .stat .lbl {
+            margin-top: 8px;
+            font-size: 12px;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+        }
+
+        /* ---------- Grid ---------- */
+        .section-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .section-head h2 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 500;
+            font-size: 1.4rem;
+            margin: 0;
+        }
+
+        .legend { display: flex; gap: 16px; font-size: 12px; color: var(--ink-soft); flex-wrap: wrap; }
+        .legend span { display: inline-flex; align-items: center; gap: 6px; }
+        .swatch { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+        .swatch.done { background: var(--sage); }
+        .swatch.now  { background: var(--gold); }
+        .swatch.next { border: 1.5px solid var(--ink-faint); }
 
         .life-grid {
             display: grid;
-            grid-template-columns: repeat(10, minmax(40px, 1fr));
-            gap: 10px;
-            margin-top: 20px;
-            justify-content: center;
+            grid-template-columns: repeat(10, 1fr);
+            gap: clamp(5px, 1.4vw, 9px);
+            margin-top: 6px;
         }
 
         .year {
-            width: 40px;
-            height: 40px;
+            aspect-ratio: 1 / 1;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
             position: relative;
-            cursor: pointer;
+            cursor: default;
+            background: transparent;
+            border: 1.5px solid var(--line);
+            transition: transform .15s ease, box-shadow .15s ease;
         }
 
-        .completed {
-            background-color: #4CAF50;
-            color: white;
+        .year.completed { background: var(--sage); border-color: var(--sage); }
+        .year.current {
+            border: 2px solid var(--gold);
+            background: conic-gradient(var(--gold) var(--progress), transparent 0);
+            box-shadow: 0 0 0 4px rgba(201,162,75,.16);
         }
+        .year.upcoming { border: 1.5px solid var(--ink-faint); opacity: .55; }
 
-        .current {
-            background: conic-gradient(#FFD700 var(--progress), transparent 0);
-            border: 2px solid #FFD700;
-        }
+        .year:hover { transform: scale(1.35); z-index: 3; box-shadow: var(--shadow); }
 
-        .upcoming {
-            border: 2px solid #9C27B0;
-            background-color: transparent;
+        /* staggered entrance */
+        .animate .year { opacity: 0; transform: scale(.4); animation: pop .5s cubic-bezier(.2,.8,.3,1) forwards; }
+        @keyframes pop { to { opacity: 1; transform: scale(1); } }
+
+        .year.has-milestone::after {
+            content: "";
+            position: absolute;
+            top: -3px; right: -3px;
+            width: 8px; height: 8px;
+            background: var(--gold);
+            border: 1.5px solid var(--paper);
+            border-radius: 50%;
         }
 
         .milestone {
             position: absolute;
-            top: -20px;
+            bottom: calc(100% + 8px);
             left: 50%;
             transform: translateX(-50%);
-            font-size: 10px;
+            font-size: 11.5px;
+            line-height: 1.35;
             white-space: nowrap;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 2px 4px;
-            border-radius: 3px;
-            z-index: 2;
-            display: none;
-        }
-
-        .year:hover .milestone {
-            display: block;
-        }
-
-        .milestone-icon {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            width: 12px;
-            height: 12px;
-            background: #FFD700;
-            border-radius: 50%;
-            border: 2px solid white;
-            display: none;
-        }
-
-        .year.has-milestone .milestone-icon {
-            display: block;
-        }
-
-        h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-
-        .personality-info {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: white;
+            background: var(--ink);
+            color: #fff;
+            padding: 6px 9px;
             border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            z-index: 5;
+            display: none;
+            box-shadow: var(--shadow);
+            pointer-events: none;
         }
-
-        .personality-info h3 {
-            color: #2c3e50;
-            margin-bottom: 10px;
+        .milestone::after {
+            content: ""; position: absolute; top: 100%; left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent; border-top-color: var(--ink);
         }
+        .year:hover .milestone { display: block; }
 
-        .milestone-list {
-            list-style: none;
-            padding: 0;
+        /* ---------- Actions ---------- */
+        .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 36px 0 8px; }
+
+        button {
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 11px 20px;
+            border-radius: 11px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: transform .12s, background .15s, border-color .15s;
         }
+        button:active { transform: translateY(1px); }
 
-        .milestone-list li {
-            padding: 8px;
-            border-bottom: 1px solid #eee;
-        }
+        .btn-primary { background: var(--sage); color: #fff; }
+        .btn-primary:hover { background: var(--sage-deep); }
+        .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+        .btn-ghost:hover { border-color: var(--ink-faint); }
 
-        .milestone-list li:last-child {
-            border-bottom: none;
-        }
-
-        .inspiration-quote {
-            font-style: italic;
-            color: #666;
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #e0f7f6;  /* Light turquoise blue */
-            border-radius: 8px;
+        /* ---------- Compare ---------- */
+        .compare {
+            margin-top: 64px;
+            padding-top: 40px;
+            border-top: 1px solid var(--line);
         }
 
         select {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: white;
+            font-family: inherit;
+            font-size: 15px;
+            color: var(--ink);
+            padding: 10px 12px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #fff;
+            margin-top: 12px;
+            min-width: 260px;
+            max-width: 100%;
+        }
+        select:focus { outline: none; border-color: var(--sage); box-shadow: 0 0 0 3px rgba(110,139,123,.18); }
+
+        .person-card {
+            margin-top: 22px;
+            background: var(--paper-card);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+        .person-card:empty { display: none; }
+        .person-card h3 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 500; font-size: 1.5rem; margin: 0 0 10px;
+        }
+        .quote {
+            font-family: 'Fraunces', Georgia, serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--sage-deep);
+            border-left: 3px solid var(--sage);
+            padding-left: 16px;
+            margin: 0 0 20px;
+        }
+        .person-card h4 { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 8px; }
+        .milestone-list { list-style: none; padding: 0; margin: 0; }
+        .milestone-list li { padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+        .milestone-list li:last-child { border-bottom: none; }
+        .milestone-list .age { color: var(--gold); font-weight: 600; margin-right: 8px; font-variant-numeric: tabular-nums; }
+
+        /* ---------- Footer / toast ---------- */
+        footer { margin-top: 56px; font-size: 13px; color: var(--ink-faint); text-align: center; }
+
+        .toast {
+            position: fixed; left: 50%; bottom: 28px;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 11px;
+            font-size: 14px; opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s;
+            box-shadow: var(--shadow); z-index: 50;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        @media (max-width: 460px) {
+            .stat { padding: 16px 10px; }
+            .stat .lbl { font-size: 10.5px; }
         }
 
-        select:hover {
-            border-color: #a8e6cf;  /* Soft mint */
+        @media (prefers-reduced-motion: reduce) {
+            .animate .year { animation: none; opacity: 1; transform: none; }
+            .year, button { transition: none; }
         }
     </style>
 </head>
 <body>
-    <div class="main-content">
-        <div class="visualization-section">
-            <h1>visualize your life in the longterm</h1>
-            <p>
-                whenever you feel stressed, take a moment to reflect on how far you've come and how much more lies ahead.<br>
-                relax and appreciate the journey.<br>
-                <p><small><em>ps: your data stays with you in your browser, i don't want it :)</em></small></p>
-            </p>
-            <div class="controls">
-                <div class="control-group">
-                    <label for="birthdate">📅 your birthdate:</label>
-                    <div class="date-inputs">
-                        <input type="date" id="birthdate" value="1990-01-01" required>
-                        <span>or</span>
-                        <input type="number" id="birthYear" placeholder="year" min="1900" max="2024">
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="lifeExpectancy">⏳ life expectancy:</label>
-                    <input type="number" id="lifeExpectancy" value="90" min="1">
-                </div>
-                <button onclick="updateVisualization()">visualize</button>
-            </div>
+    <main class="wrap">
+        <p class="eyebrow">A longterm view of life</p>
+        <h1>Visualize your life, <em>one year at a time</em></h1>
+        <p class="lede">
+            Whenever the day feels heavy, take a breath and look at the whole picture —
+            how far you've already come, and how much still lies ahead.
+        </p>
 
-            <div class="life-grid" id="lifeGrid"></div>
+        <div class="controls">
+            <div class="field">
+                <label for="birthdate">Your birthdate</label>
+                <div class="field-row">
+                    <input type="date" id="birthdate" value="1990-01-01">
+                    <span class="sep">or</span>
+                    <input type="number" id="birthYear" placeholder="year" min="1900" max="2026">
+                </div>
+            </div>
+            <div class="field">
+                <label for="lifeExpectancy">Life expectancy</label>
+                <div class="field-row">
+                    <input type="number" id="lifeExpectancy" value="90" min="1" max="120">
+                    <span class="sep">years</span>
+                </div>
+            </div>
         </div>
 
-        <div class="comparison-section">
-            <h2>compare with notable late starters</h2>
-            <div class="personality-select">
-                <label for="personality">select a personality:</label>
-                <select id="personality" onchange="updateComparison()">
-                    <option value="">choose someone...</option>
-                    <option value="ray-kroc">Ray Kroc (McDonald's)</option>
-                    <option value="colonel-sanders">Colonel Sanders (KFC)</option>
-                    <option value="vera-wang">Vera Wang (Fashion Designer)</option>
-                    <option value="samuel-jackson">Samuel L. Jackson (Actor)</option>
-                    <option value="henry-ford">Henry Ford (Ford Motor Company)</option>
-                    <option value="walt-disney">Walt Disney (Disney)</option>
-                    <option value="estee-lauder">Estée Lauder (Estée Lauder Companies)</option>
-                    <option value="lee-byung-chul">Lee Byung-chul (Samsung)</option>
-                    <option value="ingvar-kamprad">Ingvar Kamprad (IKEA)</option>
-                    <option value="peter-rogers">Peter Rogers (Marvel Studios)</option>
-                    <option value="julia-child">Julia Child (Chef & Author)</option>
-                    <option value="grandma-moses">Grandma Moses (Artist)</option>
-                    <option value="teiichi-suzuki">Teiichi Suzuki (Suzuki Motor Corporation)</option>
-                    <option value="masayoshi-son">Masayoshi Son (SoftBank)</option>
-                    <option value="phil-knight">Phil Knight (Nike)</option>
-                </select>
-            </div>
-            <div id="personalityInfo" class="personality-info"></div>
+        <div class="stats">
+            <div class="stat"><div class="num" id="statLived">0</div><div class="lbl">Days lived</div></div>
+            <div class="stat"><div class="num" id="statLeft">0</div><div class="lbl">Days ahead</div></div>
+            <div class="stat"><div class="num" id="statPct">0%</div><div class="lbl">Of life so far</div></div>
         </div>
-    </div>
+
+        <div class="section-head">
+            <h2>Your life in years</h2>
+            <div class="legend">
+                <span><i class="swatch done"></i>lived</span>
+                <span><i class="swatch now"></i>this year</span>
+                <span><i class="swatch next"></i>ahead</span>
+            </div>
+        </div>
+        <div class="life-grid" id="lifeGrid"></div>
+
+        <div class="actions">
+            <button class="btn-primary" onclick="shareLife()">Share my life ↗</button>
+            <button class="btn-ghost" onclick="copyLink()">Copy link</button>
+        </div>
+
+        <section class="compare">
+            <div class="section-head"><h2>Compare with notable late starters</h2></div>
+            <p class="lede" style="margin-bottom:0">A reminder that there's no fixed timetable for a meaningful life.</p>
+            <select id="personality" onchange="updateComparison()">
+                <option value="">Choose someone…</option>
+                <option value="ray-kroc">Ray Kroc (McDonald's)</option>
+                <option value="colonel-sanders">Colonel Sanders (KFC)</option>
+                <option value="vera-wang">Vera Wang (Fashion Designer)</option>
+                <option value="samuel-jackson">Samuel L. Jackson (Actor)</option>
+                <option value="henry-ford">Henry Ford (Ford Motor Company)</option>
+                <option value="walt-disney">Walt Disney (Disney)</option>
+                <option value="estee-lauder">Estée Lauder (Estée Lauder Companies)</option>
+                <option value="lee-byung-chul">Lee Byung-chul (Samsung)</option>
+                <option value="ingvar-kamprad">Ingvar Kamprad (IKEA)</option>
+                <option value="peter-rogers">Peter Rogers (Marvel Studios)</option>
+                <option value="julia-child">Julia Child (Chef & Author)</option>
+                <option value="grandma-moses">Grandma Moses (Artist)</option>
+                <option value="teiichi-suzuki">Teiichi Suzuki (Suzuki Motor Corporation)</option>
+                <option value="masayoshi-son">Masayoshi Son (SoftBank)</option>
+                <option value="phil-knight">Phil Knight (Nike)</option>
+            </select>
+            <div id="personalityInfo" class="person-card"></div>
+        </section>
+
+        <footer>Your data stays with you, in your browser. Nothing is uploaded — I don't want it. 🤍</footer>
+    </main>
+
+    <div class="toast" id="toast"></div>
 
     <script>
         const personalities = {
-            'ray-kroc': {
-                name: 'Ray Kroc',
-                birthYear: 1902,
-                milestones: [
-                    { age: 52, event: "Founded McDonald's Corporation" },
-                    { age: 59, event: "Became a millionaire" },
-                    { age: 74, event: "Retired as CEO" }
-                ],
-                quote: "I was an overnight success alright, but 30 years is a long, long night."
-            },
-            'colonel-sanders': {
-                name: 'Colonel Sanders',
-                birthYear: 1890,
-                milestones: [
-                    { age: 65, event: 'Founded Kentucky Fried Chicken' },
-                    { age: 73, event: 'Sold KFC for $2 million' },
-                    { age: 90, event: 'Still working as company spokesman' }
-                ],
-                quote: "I made a resolve then that I was going to amount to something if I could. And no hours, nor amount of labor, nor amount of money would deter me from giving the best that there was in me."
-            },
-            'vera-wang': {
-                name: 'Vera Wang',
-                birthYear: 1949,
-                milestones: [
-                    { age: 40, event: 'Started Vera Wang Bridal House' },
-                    { age: 45, event: 'Became internationally recognized designer' },
-                    { age: 60, event: 'Expanded into lifestyle brand' }
-                ],
-                quote: "Success isn't about the end result, it's about what you learn along the way."
-            },
-            'samuel-jackson': {
-                name: 'Samuel L. Jackson',
-                birthYear: 1948,
-                milestones: [
-                    { age: 43, event: 'First major film role in Jungle Fever' },
-                    { age: 46, event: 'Breakthrough role in Pulp Fiction' },
-                    { age: 60, event: 'Highest-grossing actor of all time' }
-                ],
-                quote: "I'm not afraid of hard work. I'm not afraid of failure. I'm afraid of not trying."
-            },
-            'henry-ford': {
-                name: 'Henry Ford',
-                birthYear: 1863,
-                milestones: [
-                    { age: 40, event: 'Founded Ford Motor Company' },
-                    { age: 45, event: 'Introduced Model T' },
-                    { age: 50, event: 'Implemented assembly line' }
-                ],
-                quote: "Whether you think you can, or you think you can't – you're right."
-            },
-            'walt-disney': {
-                name: 'Walt Disney',
-                birthYear: 1901,
-                milestones: [
-                    { age: 27, event: 'Created Mickey Mouse' },
-                    { age: 36, event: 'Released Snow White' },
-                    { age: 54, event: 'Opened Disneyland' }
-                ],
-                quote: "All our dreams can come true, if we have the courage to pursue them."
-            },
-            'estee-lauder': {
-                name: 'Estée Lauder',
-                birthYear: 1908,
-                milestones: [
-                    { age: 38, event: 'Founded Estée Lauder Companies' },
-                    { age: 45, event: 'Expanded internationally' },
-                    { age: 60, event: 'Became a billionaire' }
-                ],
-                quote: "I never dreamed about success. I worked for it."
-            },
-            'lee-byung-chul': {
-                name: 'Lee Byung-chul',
-                birthYear: 1910,
-                milestones: [
-                    { age: 28, event: 'Founded Samsung Trading Company' },
-                    { age: 45, event: 'Expanded into electronics' },
-                    { age: 60, event: 'Became South Korea\'s largest conglomerate' }
-                ],
-                quote: "Put your heart and soul into everything you do."
-            },
-            'ingvar-kamprad': {
-                name: 'Ingvar Kamprad',
-                birthYear: 1926,
-                milestones: [
-                    { age: 17, event: 'Founded IKEA' },
-                    { age: 27, event: 'Introduced flat-pack furniture' },
-                    { age: 45, event: 'Expanded internationally' }
-                ],
-                quote: "The most dangerous poison is the feeling of achievement. The antidote is to every evening think what can be done better tomorrow."
-            },
-            'peter-rogers': {
-                name: 'Peter Rogers',
-                birthYear: 1962,
-                milestones: [
-                    { age: 45, event: 'Became CEO of Marvel Studios' },
-                    { age: 46, event: 'Released Iron Man' },
-                    { age: 56, event: 'Created highest-grossing film franchise' }
-                ],
-                quote: "I've always believed that the best way to predict the future is to create it."
-            },
-            'julia-child': {
-                name: 'Julia Child',
-                birthYear: 1912,
-                milestones: [
-                    { age: 39, event: 'Started learning French cooking' },
-                    { age: 49, event: 'Published first cookbook' },
-                    { age: 51, event: 'Began TV cooking show' }
-                ],
-                quote: "The only real stumbling block is fear of failure. In cooking you've got to have a what-the-hell attitude."
-            },
-            'grandma-moses': {
-                name: 'Grandma Moses',
-                birthYear: 1860,
-                milestones: [
-                    { age: 76, event: 'Started painting' },
-                    { age: 80, event: 'First exhibition' },
-                    { age: 100, event: 'Still actively painting' }
-                ],
-                quote: "Life is what we make it, always has been, always will be."
-            },
-            'teiichi-suzuki': {
-                name: 'Teiichi Suzuki',
-                birthYear: 1907,
-                milestones: [
-                    { age: 45, event: 'Founded Suzuki Motor Corporation' },
-                    { age: 52, event: 'Introduced first motorcycle' },
-                    { age: 65, event: 'Expanded globally' }
-                ],
-                quote: "Innovation is not about saying yes to everything. It's about saying no to all but the most crucial features."
-            },
-            'masayoshi-son': {
-                name: 'Masayoshi Son',
-                birthYear: 1957,
-                milestones: [
-                    { age: 24, event: 'Founded SoftBank' },
-                    { age: 38, event: 'Started internet investments' },
-                    { age: 60, event: 'Vision Fund investments' }
-                ],
-                quote: "I want to be the number one company in the world. I want to be the number one company in the universe."
-            },
-            'phil-knight': {
-                name: 'Phil Knight',
-                birthYear: 1938,
-                milestones: [
-                    { age: 26, event: 'Founded Blue Ribbon Sports (later Nike)' },
-                    { age: 34, event: 'Introduced Nike brand' },
-                    { age: 42, event: 'Nike went public' },
-                    { age: 60, event: 'Stepped down as CEO' },
-                    { age: 78, event: 'Published memoir "Shoe Dog"' }
-                ],
-                quote: "The cowards never started and the weak died along the way. That leaves us, ladies and gentlemen. Us."
-            }
+            'ray-kroc': { name: 'Ray Kroc', birthYear: 1902,
+                milestones: [ { age: 52, event: "Founded McDonald's Corporation" }, { age: 59, event: "Became a millionaire" }, { age: 74, event: "Retired as CEO" } ],
+                quote: "I was an overnight success alright, but 30 years is a long, long night." },
+            'colonel-sanders': { name: 'Colonel Sanders', birthYear: 1890,
+                milestones: [ { age: 65, event: 'Founded Kentucky Fried Chicken' }, { age: 73, event: 'Sold KFC for $2 million' }, { age: 90, event: 'Still working as company spokesman' } ],
+                quote: "I made a resolve then that I was going to amount to something if I could. And no hours, nor amount of labor, nor amount of money would deter me from giving the best that there was in me." },
+            'vera-wang': { name: 'Vera Wang', birthYear: 1949,
+                milestones: [ { age: 40, event: 'Started Vera Wang Bridal House' }, { age: 45, event: 'Became internationally recognized designer' }, { age: 60, event: 'Expanded into lifestyle brand' } ],
+                quote: "Success isn't about the end result, it's about what you learn along the way." },
+            'samuel-jackson': { name: 'Samuel L. Jackson', birthYear: 1948,
+                milestones: [ { age: 43, event: 'First major film role in Jungle Fever' }, { age: 46, event: 'Breakthrough role in Pulp Fiction' }, { age: 60, event: 'Highest-grossing actor of all time' } ],
+                quote: "I'm not afraid of hard work. I'm not afraid of failure. I'm afraid of not trying." },
+            'henry-ford': { name: 'Henry Ford', birthYear: 1863,
+                milestones: [ { age: 40, event: 'Founded Ford Motor Company' }, { age: 45, event: 'Introduced Model T' }, { age: 50, event: 'Implemented assembly line' } ],
+                quote: "Whether you think you can, or you think you can't – you're right." },
+            'walt-disney': { name: 'Walt Disney', birthYear: 1901,
+                milestones: [ { age: 27, event: 'Created Mickey Mouse' }, { age: 36, event: 'Released Snow White' }, { age: 54, event: 'Opened Disneyland' } ],
+                quote: "All our dreams can come true, if we have the courage to pursue them." },
+            'estee-lauder': { name: 'Estée Lauder', birthYear: 1908,
+                milestones: [ { age: 38, event: 'Founded Estée Lauder Companies' }, { age: 45, event: 'Expanded internationally' }, { age: 60, event: 'Became a billionaire' } ],
+                quote: "I never dreamed about success. I worked for it." },
+            'lee-byung-chul': { name: 'Lee Byung-chul', birthYear: 1910,
+                milestones: [ { age: 28, event: 'Founded Samsung Trading Company' }, { age: 45, event: 'Expanded into electronics' }, { age: 60, event: "Became South Korea's largest conglomerate" } ],
+                quote: "Put your heart and soul into everything you do." },
+            'ingvar-kamprad': { name: 'Ingvar Kamprad', birthYear: 1926,
+                milestones: [ { age: 17, event: 'Founded IKEA' }, { age: 27, event: 'Introduced flat-pack furniture' }, { age: 45, event: 'Expanded internationally' } ],
+                quote: "The most dangerous poison is the feeling of achievement. The antidote is to every evening think what can be done better tomorrow." },
+            'peter-rogers': { name: 'Peter Rogers', birthYear: 1962,
+                milestones: [ { age: 45, event: 'Became CEO of Marvel Studios' }, { age: 46, event: 'Released Iron Man' }, { age: 56, event: 'Created highest-grossing film franchise' } ],
+                quote: "I've always believed that the best way to predict the future is to create it." },
+            'julia-child': { name: 'Julia Child', birthYear: 1912,
+                milestones: [ { age: 39, event: 'Started learning French cooking' }, { age: 49, event: 'Published first cookbook' }, { age: 51, event: 'Began TV cooking show' } ],
+                quote: "The only real stumbling block is fear of failure. In cooking you've got to have a what-the-hell attitude." },
+            'grandma-moses': { name: 'Grandma Moses', birthYear: 1860,
+                milestones: [ { age: 76, event: 'Started painting' }, { age: 80, event: 'First exhibition' }, { age: 100, event: 'Still actively painting' } ],
+                quote: "Life is what we make it, always has been, always will be." },
+            'teiichi-suzuki': { name: 'Teiichi Suzuki', birthYear: 1907,
+                milestones: [ { age: 45, event: 'Founded Suzuki Motor Corporation' }, { age: 52, event: 'Introduced first motorcycle' }, { age: 65, event: 'Expanded globally' } ],
+                quote: "Innovation is not about saying yes to everything. It's about saying no to all but the most crucial features." },
+            'masayoshi-son': { name: 'Masayoshi Son', birthYear: 1957,
+                milestones: [ { age: 24, event: 'Founded SoftBank' }, { age: 38, event: 'Started internet investments' }, { age: 60, event: 'Vision Fund investments' } ],
+                quote: "I want to be the number one company in the world. I want to be the number one company in the universe." },
+            'phil-knight': { name: 'Phil Knight', birthYear: 1938,
+                milestones: [ { age: 26, event: 'Founded Blue Ribbon Sports (later Nike)' }, { age: 34, event: 'Introduced Nike brand' }, { age: 42, event: 'Nike went public' }, { age: 60, event: 'Stepped down as CEO' }, { age: 78, event: 'Published memoir "Shoe Dog"' } ],
+                quote: "The cowards never started and the weak died along the way. That leaves us, ladies and gentlemen. Us." }
         };
+
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         function getAge(birthdate) {
             const today = new Date();
             let age = today.getFullYear() - birthdate.getFullYear();
             const monthDiff = today.getMonth() - birthdate.getMonth();
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthdate.getDate())) {
-                age--;
-            }
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthdate.getDate())) age--;
             return age;
         }
 
         function getYearProgress(birthdate) {
             const today = new Date();
             const currentYear = today.getFullYear();
-
             const lastBirthday = new Date(birthdate);
             lastBirthday.setFullYear(currentYear);
-            if (lastBirthday > today) {
-                lastBirthday.setFullYear(currentYear - 1);
-            }
-
+            if (lastBirthday > today) lastBirthday.setFullYear(currentYear - 1);
             const nextBirthday = new Date(lastBirthday);
             nextBirthday.setFullYear(lastBirthday.getFullYear() + 1);
-
-            const totalDays = (nextBirthday - lastBirthday) / (1000 * 60 * 60 * 24);
-            const daysPassed = (today - lastBirthday) / (1000 * 60 * 60 * 24);
-
+            const totalDays = (nextBirthday - lastBirthday) / 86400000;
+            const daysPassed = (today - lastBirthday) / 86400000;
             return daysPassed / totalDays;
         }
 
-        function updateVisualization() {
-            const birthdate = new Date(document.getElementById('birthdate').value);
-            const lifeExpectancy = parseInt(document.getElementById('lifeExpectancy').value);
+        // ---- number count-up ----
+        function animateNumber(el, to, suffix) {
+            suffix = suffix || '';
+            if (reduceMotion) { el.textContent = to.toLocaleString() + suffix; return; }
+            const from = 0, dur = 850, start = performance.now();
+            function frame(now) {
+                const t = Math.min(1, (now - start) / dur);
+                const eased = 1 - Math.pow(1 - t, 3);
+                el.textContent = Math.round(from + (to - from) * eased).toLocaleString() + suffix;
+                if (t < 1) requestAnimationFrame(frame);
+            }
+            requestAnimationFrame(frame);
+        }
+
+        function getBirthdate() {
+            const v = document.getElementById('birthdate').value;
+            const d = new Date(v);
+            return isNaN(d) ? new Date('1990-01-01') : d;
+        }
+
+        function updateStats(birthdate, lifeExpectancy) {
+            const today = new Date();
+            const daysLived = Math.max(0, Math.floor((today - birthdate) / 86400000));
+            const totalDays = Math.round(lifeExpectancy * 365.25);
+            const daysLeft = Math.max(0, totalDays - daysLived);
+            const pct = Math.min(100, Math.round((daysLived / totalDays) * 100));
+            animateNumber(document.getElementById('statLived'), daysLived);
+            animateNumber(document.getElementById('statLeft'), daysLeft);
+            animateNumber(document.getElementById('statPct'), pct, '%');
+            return { daysLived, daysLeft, pct };
+        }
+
+        function updateVisualization(animate) {
+            const birthdate = getBirthdate();
+            const lifeExpectancy = Math.max(1, parseInt(document.getElementById('lifeExpectancy').value) || 90);
             const age = getAge(birthdate);
             const progress = getYearProgress(birthdate);
-            const selectedPersonalityId = document.getElementById('personality').value;
+            const selectedId = document.getElementById('personality').value;
+
+            updateStats(birthdate, lifeExpectancy);
 
             const lifeGrid = document.getElementById('lifeGrid');
             lifeGrid.innerHTML = '';
+            lifeGrid.classList.toggle('animate', !!animate && !reduceMotion);
 
-            // Get milestones based on selection
             const allMilestones = [];
-            if (selectedPersonalityId && personalities[selectedPersonalityId]) {
-                // If a personality is selected, only show their milestones
-                personalities[selectedPersonalityId].milestones.forEach(milestone => {
-                    allMilestones.push({
-                        age: milestone.age,
-                        event: milestone.event,
-                        person: personalities[selectedPersonalityId].name
-                    });
-                });
+            if (selectedId && personalities[selectedId]) {
+                personalities[selectedId].milestones.forEach(m => allMilestones.push({ age: m.age, event: m.event, person: personalities[selectedId].name }));
             } else {
-                // If no personality is selected, show all milestones
-                Object.values(personalities).forEach(personality => {
-                    personality.milestones.forEach(milestone => {
-                        allMilestones.push({
-                            age: milestone.age,
-                            event: milestone.event,
-                            person: personality.name
-                        });
-                    });
-                });
+                Object.values(personalities).forEach(p => p.milestones.forEach(m => allMilestones.push({ age: m.age, event: m.event, person: p.name })));
             }
 
             for (let year = 1; year <= lifeExpectancy; year++) {
-                const yearElement = document.createElement('div');
-                yearElement.className = 'year';
+                const el = document.createElement('div');
+                el.className = 'year';
+                el.title = 'Age ' + year;
 
-                if (year <= age) {
-                    yearElement.classList.add('completed');
-                    yearElement.textContent = year;
-                } else if (year === age + 1) {
-                    yearElement.classList.add('current');
-                    yearElement.style.setProperty('--progress', `${progress * 100}%`);
-                    yearElement.textContent = year;
-                } else {
-                    yearElement.classList.add('upcoming');
-                    yearElement.textContent = year;
-                }
+                if (year <= age) el.classList.add('completed');
+                else if (year === age + 1) { el.classList.add('current'); el.style.setProperty('--progress', `${progress * 100}%`); }
+                else el.classList.add('upcoming');
 
-                // Add milestone icon and tooltip if this year has any milestones
+                if (animate && !reduceMotion) el.style.animationDelay = (year * 7) + 'ms';
+
                 const yearMilestones = allMilestones.filter(m => m.age === year);
-                if (yearMilestones.length > 0) {
-                    yearElement.classList.add('has-milestone');
-                    
-                    // Create milestone icon
-                    const milestoneIcon = document.createElement('div');
-                    milestoneIcon.className = 'milestone-icon';
-                    yearElement.appendChild(milestoneIcon);
-
-                    // Create milestone tooltip
-                    const milestone = document.createElement('div');
-                    milestone.className = 'milestone';
-                    milestone.innerHTML = yearMilestones.map(m => 
-                        selectedPersonalityId ? 
-                            `<div>${m.event}</div>` : 
-                            `<div>${m.person}: ${m.event}</div>`
-                    ).join('');
-                    yearElement.appendChild(milestone);
+                if (yearMilestones.length) {
+                    el.classList.add('has-milestone');
+                    const tip = document.createElement('div');
+                    tip.className = 'milestone';
+                    tip.innerHTML = yearMilestones.map(m => selectedId ? `<div>Age ${m.age}: ${m.event}</div>` : `<div>${m.person}: ${m.event}</div>`).join('');
+                    el.appendChild(tip);
                 }
-
-                lifeGrid.appendChild(yearElement);
+                lifeGrid.appendChild(el);
             }
         }
 
         function updateComparison() {
-            const personalityId = document.getElementById('personality').value;
-            const infoDiv = document.getElementById('personalityInfo');
-            
-            if (!personalityId) {
-                infoDiv.innerHTML = '';
-                updateVisualization(); // Update visualization to clear milestones
-                return;
-            }
-
-            const personality = personalities[personalityId];
-            let html = `
-                <h3>${personality.name}</h3>
-                <div class="inspiration-quote">"${personality.quote}"</div>
-                <h4>Key Milestones:</h4>
-                <ul class="milestone-list">
-            `;
-
-            personality.milestones.forEach(milestone => {
-                html += `<li>Age ${milestone.age}: ${milestone.event}</li>`;
-            });
-
-            html += '</ul>';
-            infoDiv.innerHTML = html;
-            updateVisualization(); // Update visualization with new personality's milestones
+            const id = document.getElementById('personality').value;
+            const info = document.getElementById('personalityInfo');
+            if (!id) { info.innerHTML = ''; updateVisualization(false); return; }
+            const p = personalities[id];
+            let html = `<h3>${p.name}</h3><div class="quote">${p.quote}</div><h4>Key milestones</h4><ul class="milestone-list">`;
+            p.milestones.forEach(m => html += `<li><span class="age">Age ${m.age}</span>${m.event}</li>`);
+            info.innerHTML = html + '</ul>';
+            updateVisualization(false);
         }
 
-        // Initialize with default values
-        window.onload = function() {
-            updateVisualization();
-            setupDateInputs();
+        // ---- share ----
+        function currentData() {
+            const birthdate = getBirthdate();
+            const lifeExpectancy = Math.max(1, parseInt(document.getElementById('lifeExpectancy').value) || 90);
+            const age = getAge(birthdate);
+            const s = (function () {
+                const today = new Date();
+                const daysLived = Math.max(0, Math.floor((today - birthdate) / 86400000));
+                const totalDays = Math.round(lifeExpectancy * 365.25);
+                return { daysLived, daysLeft: Math.max(0, totalDays - daysLived), pct: Math.min(100, Math.round(daysLived / totalDays * 100)) };
+            })();
+            return { lifeExpectancy, age, ...s };
+        }
+
+        function drawCard() {
+            const W = 1200, H = 630, c = document.createElement('canvas');
+            c.width = W; c.height = H;
+            const x = c.getContext('2d');
+            const d = currentData();
+
+            x.fillStyle = '#FBF8F2'; x.fillRect(0, 0, W, H);
+            x.fillStyle = '#6E8B7B'; x.font = '600 22px Inter, sans-serif';
+            x.fillText('VISUALIZE YOUR LIFE', 64, 78);
+
+            x.fillStyle = '#2B2722'; x.font = '500 56px Georgia, serif';
+            x.fillText(`${d.pct}% of my life so far`, 64, 150);
+
+            // stats
+            const stats = [[d.daysLived.toLocaleString(), 'days lived'], [d.daysLeft.toLocaleString(), 'days ahead'], [d.age, 'years old']];
+            stats.forEach((st, i) => {
+                const sx = 64 + i * 360;
+                x.fillStyle = '#5A7567'; x.font = '500 46px Georgia, serif'; x.fillText(st[0], sx, 240);
+                x.fillStyle = '#6B635A'; x.font = '400 20px Inter, sans-serif'; x.fillText(st[1], sx, 272);
+            });
+
+            // grid of dots
+            const cols = 18, r = 11, gap = 30, ox = 64, oy = 330;
+            for (let yr = 1; yr <= d.lifeExpectancy; yr++) {
+                const i = yr - 1, cx = ox + (i % cols) * gap + r, cy = oy + Math.floor(i / cols) * gap + r;
+                x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2);
+                if (yr <= d.age) { x.fillStyle = '#6E8B7B'; x.fill(); }
+                else if (yr === d.age + 1) { x.fillStyle = '#C9A24B'; x.fill(); }
+                else { x.strokeStyle = '#B7AE9F'; x.lineWidth = 1.5; x.stroke(); }
+            }
+
+            x.fillStyle = '#B7AE9F'; x.font = '400 22px Inter, sans-serif';
+            x.fillText('visualizelife.netlify.app', 64, H - 44);
+            return c;
+        }
+
+        async function shareLife() {
+            const canvas = drawCard();
+            canvas.toBlob(async (blob) => {
+                const file = new File([blob], 'my-life.png', { type: 'image/png' });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try { await navigator.share({ files: [file], title: 'Visualize Your Life', text: 'A calm view of a whole life.' }); return; }
+                    catch (e) { /* fall through to download */ }
+                }
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = 'my-life.png'; a.click();
+                URL.revokeObjectURL(url);
+                showToast('Saved your life card 🤍');
+            }, 'image/png');
+        }
+
+        function copyLink() {
+            const url = location.href.split('#')[0];
+            navigator.clipboard.writeText(url).then(() => showToast('Link copied — share the calm.'),
+                () => showToast(url));
+        }
+
+        let toastTimer;
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
         }
 
         function setupDateInputs() {
             const birthdateInput = document.getElementById('birthdate');
             const birthYearInput = document.getElementById('birthYear');
+            const expectancyInput = document.getElementById('lifeExpectancy');
 
-            // Set initial year value from date input
             birthYearInput.value = new Date(birthdateInput.value).getFullYear();
 
-            // Update date when year changes
-            birthYearInput.addEventListener('change', function() {
-                const currentDate = new Date(birthdateInput.value);
-                currentDate.setFullYear(parseInt(this.value));
-                birthdateInput.value = currentDate.toISOString().split('T')[0];
-                updateVisualization();
+            birthYearInput.addEventListener('input', function () {
+                const y = parseInt(this.value);
+                if (!y || y < 1900 || y > 2026) return;
+                const cur = new Date(birthdateInput.value);
+                cur.setFullYear(y);
+                birthdateInput.value = cur.toISOString().split('T')[0];
+                updateVisualization(false);
             });
-
-            // Update year when date changes
-            birthdateInput.addEventListener('change', function() {
+            birthdateInput.addEventListener('change', function () {
                 birthYearInput.value = new Date(this.value).getFullYear();
-                updateVisualization();
+                updateVisualization(false);
             });
+            expectancyInput.addEventListener('input', () => updateVisualization(false));
         }
+
+        window.onload = function () {
+            setupDateInputs();
+            updateVisualization(true);
+        };
     </script>
 </body>
 </html>
